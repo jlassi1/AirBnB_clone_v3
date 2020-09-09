@@ -1,4 +1,4 @@
-#!usr/bin/python
+#!/usr/bin/python3
 """app module """
 from flask import Flask, Blueprint
 from models import storage
@@ -17,6 +17,6 @@ def teardown_db(exception):
 
 if __name__ == "__main__":
     """ main function"""
-    app.run(host=getenv('HBNB_API_HOST', '0.0.0.0'),
-            port=int(getenv('HBNB_API_PORT', '5000')),
+    app.run(host=getenv('HBNB_API_HOST', default='0.0.0.0'),
+            port=int(getenv('HBNB_API_PORT', default=²'5000')),
             threaded=True)

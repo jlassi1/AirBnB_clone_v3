@@ -1,4 +1,4 @@
-#!usr/bin/python
+#!/usr/bin/python3
 """ Index module"""
 from api.v1.views import app_views
 from flask import Flask, jsonify
@@ -12,7 +12,7 @@ def status():
 
 
 @app_views.route('/stats', strict_slashes=False)
-def status_count():
+def status_count(): 
     """status count function """
     clss = {
         "Amenity": "amenities",
