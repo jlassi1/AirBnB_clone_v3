@@ -12,7 +12,7 @@ def status():
 
 
 @app_views.route('/stats', strict_slashes=False)
-def status_count(): 
+def status_count():
     """status count function """
     clss = {
         "Amenity": "amenities",
