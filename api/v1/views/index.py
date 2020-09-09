@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!usr/bin/python
 """ """
 from api.v1.views import app_views
 from flask import Flask, jsonify

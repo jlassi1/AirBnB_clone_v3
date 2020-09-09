@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!usr/bin/python
 """ """
 from flask import Blueprint
 
