@@ -29,7 +29,7 @@ def del_state(state_id=None):
     if storage.get(State, state_id):
         storage.delete(storage.get(State, state_id))
         storage.save()
-        return jsonify({})
+        return make_response(jsonify({}),200)
     else:
         abort(404)
 
@@ -38,7 +38,7 @@ def del_state(state_id=None):
 def post_state():
     """ post state """
     state = request.get_json()
-    if state is None:
+    if not state:
         abort(400, message="Not a JSON")
     elif "name" not in state.keys():
         abort(400, message="Missing name")
