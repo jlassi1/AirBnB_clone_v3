@@ -44,9 +44,8 @@ def post_state():
         abort(400, "Missing name")
     else:
         new_state = State(**state)
-        storage.new(new_state)
         storage.save()
-        return make_response(jsonify(new_state.to_dict()), 201)
+        return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
