@@ -3,7 +3,7 @@
 from api.v1.views import app_views
 from flask import jsonify, abort, request, make_response
 from models import storage
-from models.state import State
+from models.city import City
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
@@ -29,7 +29,7 @@ def del_state(state_id=None):
     if storage.get(State, state_id):
         storage.delete(storage.get(State, state_id))
         storage.save()
-        return chjsonify({})
+        return jsonify({})
     else:
         abort(404)
 
@@ -60,7 +60,6 @@ def PutState(state_id=None):
     for k, v in state.items():
         if k in ['id', 'created_at', 'updated_at']:
             pass
-        else:
-            setattr(updated, k, v)
+        setattr(updated, k, v)
     storage.save()
-    return jsonify(updated.to_dict()), 200
+    return jsonify(updated_state.to_dict()), 200
