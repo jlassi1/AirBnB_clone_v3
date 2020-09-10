@@ -7,23 +7,18 @@ from models.state import State
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
-def get_states():
-    '''retrieve all states'''
-    dict = {}
-    listx = []
-    for obj in storage.all("State").values():
-        listx.append(obj.to_dict())
-    return jsonify(listx)
-
-
-@app_views.route('/states/<state_id>', methods=['GET'],
-                 strict_slashes=False)
-def retrieve_state_id(state_id):
-    """retrieve state with id"""
-    state = storage.get(State, state_id)
-    if not state:
+@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
+def states(state_id=None):
+    """State objects that handles all default RestFul API actions"""
+    if state_id is None:
+        list_states = []
+        for state in storage.all(State).values():
+            list_states.append(state.to_dict())
+        return jsonify(list_states)
+    elif storage.get(State, state_id):
+        return jsonify(storage.get(State, state_id).to_dict())
+    else:
         abort(404)
-    return jsonify(state.to_dict())
 
 
 @app_views.route(
