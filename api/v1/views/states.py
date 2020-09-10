@@ -7,18 +7,23 @@ from models.state import State
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
-def states(state_id=None):
-    """State objects that handles all default RestFul API actions"""
-    if state_id is None:
-        list_states = []
-        for state in storage.all(State).values():
-            list_states.append(state.to_dict())
-        return jsonify(list_states)
-    elif storage.get(State, state_id):
-        return jsonify(storage.get(State, state_id).to_dict())
-    else:
+def get_states():
+    '''retrieving  all states'''
+    dict = {}
+    listx = []
+    for obj in storage.all("State").values():
+        listx.append(obj.to_dict())
+    return jsonify(listx)
+
+
+@app_views.route('/states/<state_id>', methods=['GET'],
+                 strict_slashes=False)
+def retrieve_state_id(state_id):
+    """retrieving  state with id"""
+    state = storage.get(State, state_id)
+    if not state:
         abort(404)
+    return jsonify(state.to_dict())
 
 
 @app_views.route(
@@ -44,7 +49,6 @@ def post_state():
         abort(400, message="Missing name")
     else:
         new_state = State(**state)
-        storage.new(new_state)
         storage.save()
         return jsonify(new_state.to_dict()), 201
 
