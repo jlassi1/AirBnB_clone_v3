@@ -60,6 +60,7 @@ def PutState(state_id=None):
     for k, v in state.items():
         if k in ['id', 'created_at', 'updated_at']:
             pass
-        setattr(updated, k, v)
+        else:
+            setattr(updated, k, v)
     storage.save()
-    return jsonify(updated_state.to_dict()), 200
+    return jsonify(updated.to_dict()), 200
