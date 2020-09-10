@@ -29,7 +29,7 @@ def del_state(state_id=None):
     if storage.get(State, state_id):
         storage.delete(storage.get(State, state_id))
         storage.save()
-        return make_response(jsonify({}),200)
+        return make_response(jsonify({}), 200)
     else:
         abort(404)
 
@@ -45,7 +45,7 @@ def post_state():
     else:
         new_state = State(**state)
         storage.save()
-        return jsonify(new_state.to_dict()), 201
+        return make_response(jsonify(new_state.to_dict()), 201)
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
@@ -55,7 +55,7 @@ def PutState(state_id=None):
     if updated is None:
         abort(404)
     state = request.get_json()
-    if state is None:
+    if not state:
         abort(400, "Not a JSON")
     for k, v in state.items():
         if k in ['id', 'created_at', 'updated_at']:
@@ -63,4 +63,4 @@ def PutState(state_id=None):
         else:
             setattr(updated, k, v)
     storage.save()
-    return jsonify(updated.to_dict()), 200
+    return make_response(jsonify(updated.to_dict()), 200)
