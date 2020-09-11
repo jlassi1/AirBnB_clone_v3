@@ -39,9 +39,9 @@ def post_state():
     """ post state """
     state = request.get_json()
     if state is None:
-        abort(400, message="Not a JSON")
+        abort(400, "Not a JSON")
     elif "name" not in state.keys():
-        abort(400, message="Missing name")
+        abort(400, "Missing name")
     else:
         new_state = State(**state)
         storage.save()
