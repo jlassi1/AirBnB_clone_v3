@@ -61,7 +61,7 @@ def post_place(city_id=None):
             abort(400, "Missing name")
         if "user_id" not in place.key():
             abort(400, "Missing user_id")
-    if not storage.get(User, place["user_id"]):
+        if not storage.get(User, place["user_id"]):
             abort(404)
         else:
             place['city_id'] = city_id
