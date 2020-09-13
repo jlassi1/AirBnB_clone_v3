@@ -15,7 +15,7 @@ def users(user_id=None):
         for user in storage.all(User).values():
             list_users.append(user.to_dict())
         return jsonify(list_users)
-    elif storage.get(user, user_id):
+    elif storage.get(User, user_id):
         return jsonify(storage.get(User, user_id).to_dict())
     else:
         abort(404)
