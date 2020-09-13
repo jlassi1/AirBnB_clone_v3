@@ -29,7 +29,7 @@ def del_state(state_id=None):
     if storage.get(State, state_id):
         storage.delete(storage.get(State, state_id))
         storage.save()
-        return chjsonify({})
+        return jsonify({})
     else:
         abort(404)
 
