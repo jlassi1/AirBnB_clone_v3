@@ -53,7 +53,7 @@ def del_review(review_id=None):
     strict_slashes=False)
 def post_review(place_id=None):
     """ post review """
-    place = storage.get(place, place_id)
+    place = storage.get(Place, place_id)
     if place:
         review = request.get_json()
         if not review:
@@ -66,7 +66,7 @@ def post_review(place_id=None):
             abort(400, "Missing text")
         else:
             review['place_id'] = place.id
-            new_review = review(**review)
+            new_review = Review(**review)
             storage.new(new_review)
             storage.save()
             return jsonify(new_review.to_dict()), 201
