@@ -52,6 +52,7 @@ def del_place(place_id=None):
     strict_slashes=False)
 def post_place(city_id=None):
     """ post place """
+    from models.user import User
     if storage.get(City, city_id):
         place = request.get_json()
         if not place:
