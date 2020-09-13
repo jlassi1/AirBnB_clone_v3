@@ -60,7 +60,7 @@ def put_user(user_id=None):
     if update is None:
         abort(400, "Not a JSON")
     for k, v in update.items():
-        if k not in ['id', 'created_at', 'updated_at']:
+        if k not in ['id', 'created_at', 'updated_at', 'email']:
             setattr(user, k, v)
     storage.save()
     return jsonify(user.to_dict()), 200
