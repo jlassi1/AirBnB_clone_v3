@@ -65,7 +65,6 @@ def post_place(city_id=None):
             abort(404)
         else:
             place['city_id'] = storage.get(City, city_id).id
-            place['user_id'] = storage.get(User, place["user_id"]).id
             new_place = Place(**place)
             storage.new(new_place)
             storage.save()
