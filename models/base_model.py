@@ -25,6 +25,7 @@ class BaseModel:
         id = Column(String(60), primary_key=True)
         created_at = Column(DateTime, default=datetime.utcnow)
         updated_at = Column(DateTime, default=datetime.utcnow)
+        password = Column(String(128), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
@@ -68,6 +69,9 @@ class BaseModel:
         new_dict["__class__"] = self.__class__.__name__
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
+        if "password" in new_dict:
+            if getenv('HBNB_TYPE_STORAGE') == "db":
+                del new_dict['password']
         return new_dict
 
     def delete(self):
