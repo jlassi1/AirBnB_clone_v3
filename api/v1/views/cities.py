@@ -52,32 +52,32 @@ def del_city(city_id=None):
     strict_slashes=False)
 def post_city(state_id=None):
     """ post city """
-    if not storage.get(State, state_id):
-        abort(404)
-    city = request.get_json()
-    if not city:
-        abort(400, "Not a JSON")
-    if "name" not in city.keys():
-        abort(400, "Missing name")
-    else:
-        city['state_id'] = state.id
-        new_city = City(**city)
-        storage.new(new_city)
-        storage.save()
-        return jsonify(new_city.to_dict()), 201
+    if storage.get(State, state_id):
+        city = request.get_json()
+        if not city:
+            abort(400, "Not a JSON")
+        if "name" not in city.keys():
+            abort(400, "Missing name")
+        else:
+            city['state_id'] = state.id
+            new_city = City(**city)
+            storage.new(new_city)
+            storage.save()
+            return jsonify(new_city.to_dict()), 201
+    abort(404)
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def put_city(city_id=None):
     """ put city """
     city = storage.get(City, city_id)
-    if city is None:
-        abort(404)
-    updated = request.get_json()
-    if updated is None:
-        abort(400, "Not a JSON")
-    for k, v in updated.items():
-        if k not in ['id', 'created_at', 'updated_at']:
-            setattr(city, k, v)
-    storage.save()
-    return jsonify(updated.to_dict()), 200
+    if city:
+        updated = request.get_json()
+        if updated is None:
+            abort(400, "Not a JSON")
+        for k, v in updated.items():
+            if k not in ['id', 'created_at', 'updated_at']:
+                setattr(city, k, v)
+        storage.save()
+        return jsonify(updated.to_dict()), 200
+    abort(404)
