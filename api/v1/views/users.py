@@ -40,8 +40,10 @@ def post_user():
     user = request.get_json()
     if user is None:
         abort(400, "Not a JSON")
-    elif "name" not in user.keys():
-        abort(400, "Missing name")
+    elif "email" not in user.keys():
+        abort(400, "Missing email")
+    elif "password" not in user.keys():
+        abort(400, "Missing password")
     else:
         new_user = User(**user)
         storage.save()
