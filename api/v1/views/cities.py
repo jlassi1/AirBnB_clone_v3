@@ -73,11 +73,11 @@ def put_city(city_id=None):
     city = storage.get(City, city_id)
     if city:
         updated = request.get_json()
-        if updated is None:
+        if not updated:
             abort(400, "Not a JSON")
         for k, v in updated.items():
             if k not in ['id', 'created_at', 'updated_at']:
                 setattr(city, k, v)
         storage.save()
-        return jsonify(updated.to_dict()), 200
+        return jsonify(city.to_dict()), 200
     abort(404)
