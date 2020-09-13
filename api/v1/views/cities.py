@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""State objects that handles all default RestFul API actions """
+"""City objects that handles all default RestFul API actions """
 from api.v1.views import app_views
 from flask import jsonify, abort, request, make_response
 from models import storage
@@ -18,7 +18,7 @@ from models.city import City
 def states_cities(state_id=None, city_id=None):
     """State objects that handles all default RestFul API actions"""
     if city_id is not None:
-        if storage.get(City, city_id):
+        if storage.get(City, city_id) is not None:
             return jsonify(storage.get(City, city_id).to_dict())
         else:
             abort(404)
@@ -68,15 +68,17 @@ def post_city(state_id):
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def put_city(city_id=None):
-    """ PUT city """
-    city = request.get_json()
-    if city is None:
-        abort(400, "Not a JSON")
+    """ put city """
     updated = storage.get(City, city_id)
     if updated is None:
         abort(404)
+    city = request.get_json()
+    if city is None:
+        abort(400, "Not a JSON")
     for k, v in city.items():
-        if k not in ['id', 'created_at', 'updated_at']:
+        if k in ['id', 'created_at', 'updated_at']:
+            pass
+        else:
             setattr(updated, k, v)
     storage.save()
     return jsonify(updated.to_dict()), 200
