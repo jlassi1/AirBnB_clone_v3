@@ -35,7 +35,7 @@ def del_amenity(amenity_id=None):
         abort(404)
 
 
-@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
+@app_views.route('/amenities', methods=['POST'])
 def post_amenity():
     """ post amenity """
     amenity = request.get_json()
