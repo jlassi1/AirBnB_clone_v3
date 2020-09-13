@@ -52,23 +52,24 @@ def del_place(place_id=None):
     strict_slashes=False)
 def post_place(city_id=None):
     """ post place """
-    from models.user import User
-    if storage.get(City, city_id):
-        place = request.get_json()
-        if not place:
+    from models.place import Place
+    city = storage.get("City", city_id)
+    if city:
+        content = request.get_json()
+        if not content:
             abort(400, "Not a JSON")
-        if "name" not in place.key():
-            abort(400, "Missing name")
-        if "user_id" not in place.key():
+        if 'user_id' not in content:
             abort(400, "Missing user_id")
-        if not storage.get(User, place["user_id"]):
+        user = storage.get("User", content['user_id'])
+        if not user:
             abort(404)
-        else:
-            place['city_id'] = city_id
-            new_place = Place(**place)
-            storage.new(new_place)
-            storage.save()
-            return jsonify(new_place.to_dict()), 201
+        if 'name' not in content:
+            abort(400, "Missing name")
+        content['city_id'] = city.id
+        place = Place(**content)
+        storage.new(place)
+        storage.save()
+        return jsonify(place.to_dict()), 201
     abort(404)
 
 
