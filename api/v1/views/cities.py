@@ -20,6 +20,8 @@ def states_cities(state_id=None, city_id=None):
     if city_id is not None:
         if storage.get(City, city_id):
             return jsonify(storage.get(City, city_id).to_dict())
+        else:
+            abort(404)
     if state_id is not None and storage.get(State, state_id):
         state = storage.get(State, state_id)
         list_cities = []
