@@ -6,8 +6,15 @@ from models import storage
 from models.state import State
 from models.city import City
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
-@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+
+@app_views.route(
+    '/states/<state_id>/cities',
+    methods=['GET'],
+    strict_slashes=False)
+@app_views.route(
+    '/cities/<city_id>',
+    methods=['GET'],
+    strict_slashes=False)
 def states_cities(state_id=None, city_id=None):
     """State objects that handles all default RestFul API actions"""
     if city_id is not None:
@@ -22,6 +29,7 @@ def states_cities(state_id=None, city_id=None):
         return jsonify(list_cities)
     else:
         abort(404)
+
 
 @app_views.route(
     '/cities/<city_id>', methods=['DELETE'],
@@ -64,7 +72,7 @@ def put_city(city_id=None):
     if updated is None:
         abort(404)
     for k, v in city.items():
-        if k not in  ['id', 'created_at', 'updated_at']:
+        if k not in ['id', 'created_at', 'updated_at']:
             setattr(updated, k, v)
     storage.save()
     return jsonify(updated.to_dict()), 200
