@@ -1,15 +1,15 @@
 #!/usr/bin/python3
-"""States module """
+"""users module """
 from api.v1.views import app_views
 from flask import jsonify, abort, request, make_response
 from models import storage
-from models.state import State
+from models.user import state
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def states(state_id=None):
-    """State objects that handles all default RestFul API actions"""
+    """state objects that handles all default RestFul API actions"""
     if state_id is None:
         list_states = []
         for state in storage.all(State).values():
@@ -40,8 +40,10 @@ def post_state():
     state = request.get_json()
     if state is None:
         abort(400, "Not a JSON")
-    elif "name" not in state.keys():
-        abort(400, "Missing name")
+    elif "email" not in state.keys():
+        abort(400, "Missing email")
+    elif "password" not in state.keys():
+        abort(400, "Missing password")
     else:
         new_state = State(**state)
         storage.save()
@@ -51,14 +53,14 @@ def post_state():
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def put_state(state_id=None):
     """ put state """
-    state = storage.get("State", state_id)
+    state = storage.get(State, state_id)
     if state is None:
         abort(404)
     update = request.get_json()
     if update is None:
         abort(400, "Not a JSON")
     for k, v in update.items():
-        if k not in ['id', 'created_at', 'updated_at']:
-            setattr(state, k, v)
+        if k not in ['id', 'created_at', 'updated_at', 'email']:
+            setattr(State, k, v)
     storage.save()
     return jsonify(state.to_dict()), 200
