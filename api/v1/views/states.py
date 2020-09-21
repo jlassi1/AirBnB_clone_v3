@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""users module """
+"""States module """
 from api.v1.views import app_views
 from flask import jsonify, abort, request, make_response
 from models import storage
@@ -9,7 +9,7 @@ from models.state import State
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def states(state_id=None):
-    """state objects that handles all default RestFul API actions"""
+    """State objects that handles all default RestFul API actions"""
     if state_id is None:
         list_states = []
         for state in storage.all(State).values():
@@ -40,10 +40,8 @@ def post_state():
     state = request.get_json()
     if state is None:
         abort(400, "Not a JSON")
-    elif "email" not in state.keys():
-        abort(400, "Missing email")
-    elif "password" not in state.keys():
-        abort(400, "Missing password")
+    elif "name" not in state.keys():
+        abort(400, "Missing name")
     else:
         new_state = State(**state)
         storage.save()
@@ -51,16 +49,17 @@ def post_state():
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
-def put_state(state_id=None):
-    """ put state """
-    state = storage.get(State, state_id)
-    if state is None:
+def PutState(state_id=None):
+    """ PUT state """
+    updated = storage.get("State", state_id)
+    if updated is None:
         abort(404)
-    update = request.get_json()
-    if update is None:
+    state = request.get_json()
+    if state is None:
         abort(400, "Not a JSON")
-    for k, v in update.items():
-        if k not in ['id', 'created_at', 'updated_at', 'email']:
-            setattr(State, k, v)
+    for k, v in state.items():
+        if k in ['id', 'created_at', 'updated_at']:
+            pass
+        setattr(updated, k, v)
     storage.save()
-    return jsonify(state.to_dict()), 200
+    return jsonify(updated_state.to_dict()), 200
